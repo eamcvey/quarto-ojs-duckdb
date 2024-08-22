@@ -51,6 +51,7 @@ viewof names1 = Inputs.select(
 
 Plot.plot({
 marginLeft: 50,
+x: {tickFormat: d => d}, // not working!
 marks: [
 Plot.ruleY([0]),
   Plot.lineY(
@@ -58,7 +59,7 @@ Plot.ruleY([0]),
     {x: 'year',
     y: 'n',
     stroke: 'name',
-    tip: true},
+    tip: {format: {x: "d"}}},
     )
 ]
 })
@@ -70,6 +71,7 @@ Plot.ruleY([0]),
 
 Plot.plot({
 marginLeft: 50,
+x: {tickFormat: d => d},
 marks: [
 Plot.ruleY([0]),
   Plot.lineY(
@@ -77,7 +79,7 @@ Plot.ruleY([0]),
     {x: 'year',
     y: 'n',
     stroke: 'prop',
-    tip: true},
+    tip: {format: {x: "d"}}},
     )
 ]
 })
