@@ -1,0 +1,95 @@
+---
+title: "Babyname Trend Explorer"
+format:
+  dashboard:
+    scrolling: false
+    orientation: columns
+    theme:
+    - flatly
+---
+
+```{ojs}
+//| output: false
+<!-- import { aq, op } from '@uwdata/arquero' -->
+
+db = DuckDBClient.of({babynames: FileAttachment("babynames.parquet")})
+
+```
+
+```{ojs}
+//| output: false
+
+names_query1 = "SELECT year, name, sex, n, prop FROM babynames WHERE sex = 'F' AND name IN ('" + names1 + "')"
+
+names_query2 = "SELECT year, name, sex, n, prop FROM babynames WHERE sex = 'F' and name IN ('Ava', 'Barbara', 'Emma', 'Isabella', 'Jennifer', 'Linda', 'Mary', 'Olivia', 'Shirley', 'Sophia') ORDER BY name, year"
+
+selected_table1 = db.query(names_query1)
+
+```
+
+
+
+## Column {width=15%}
+
+### Row {height = 10%}
+
+```{ojs}
+//| title: Select Name
+
+viewof names1 = Inputs.select(
+[null, "Ava", "Barbara", "Emma", "Isabella", "Jennifer", "Linda", 
+"Mary", "Olivia", "Shirley", "Sophia"],
+{value: null, label: ''}
+)
+
+```
+
+## Column {.tabset}
+
+```{ojs}
+//| title: Trends by Total Babies
+
+Plot.plot({
+marginLeft: 50,
+marks: [
+Plot.ruleY([0]),
+  Plot.lineY(
+  selected_table1, 
+    {x: 'year',
+    y: 'n',
+    stroke: 'name',
+    tip: true},
+    )
+]
+})
+
+```
+
+```{ojs}
+//| title: Trends by Proportion
+
+Plot.plot({
+marginLeft: 50,
+marks: [
+Plot.ruleY([0]),
+  Plot.lineY(
+  selected_table1, 
+    {x: 'year',
+    y: 'n',
+    stroke: 'prop',
+    tip: true},
+    )
+]
+})
+
+```
+
+
+```{ojs}
+//| title: Debug
+
+names_query1
+
+```
+
+
